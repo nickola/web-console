@@ -57,7 +57,10 @@ module.exports = function(grunt) {
                         source = source.replace(/`(\$[^`]+)`/g, '$1');
                         source = source.replace(/`/g, '"');
 
-                        // Links
+                        // Download link
+                        source = source.replace(/\[(Download)\]\([^\)]+\)\s*/g, '$1 ');
+
+                        // Other links
                         source = source.replace(/\[([^\]]+)\]\s*/g, '$1 ');
 
                         // Lists

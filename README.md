@@ -13,7 +13,7 @@ Installation
 
 Installation process is really simple:
 
-  - Download latest version of Web Console.
+  - [Download](https://github.com/nickola/web-console/releases/download/v0.9.5/webconsole-0.9.5.zip) latest version of Web Console.
   - Unpack archive and open file `webconsole.php` in your favorite text editor.
   - At the top of the file enter your `$USER` and `$PASSWORD` credentials, edit any other settings that you like (see description in the comments).
   - Upload changed file `webconsole.php` to the web server and open it in the browser.
