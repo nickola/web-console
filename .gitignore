@@ -1,0 +1,9 @@
+# MacOS
+.DS_Store
+
+# Node.js
+node_modules
+
+# Release
+release/parts
+release/webconsole*

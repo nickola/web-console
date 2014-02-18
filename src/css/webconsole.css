@@ -1,0 +1,18 @@
+body { background-color: #000000; }
+
+body, .terminal, .terminal .terminal-output div div, .terminal .prompt {
+    color: #cccccc;
+    font-family: monospace, fixed;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+a, a:hover, .terminal a, .terminal a:hover { color: #6c71c4; }
+
+.spaced { margin: 15px 0; }
+.spaced-top { margin: 15px 0 0 0; }
+.spaced-bottom { margin: 0 0 15px 0; }
+
+.configure { margin: 20px; }
+.configure .variable { color: #d33682; }
+.configure p, .configure ul { margin: 5px 0 0 0; }

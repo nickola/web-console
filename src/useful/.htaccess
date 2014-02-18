@@ -1,0 +1,30 @@
+# Example '.htaccess' for Web Console
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^/?$ %{REQUEST_URI}webconsole.php [L]
+    RewriteRule !^(webconsole\.php|favicon\.ico)$ - [F]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    Order Deny,Allow
+    Deny from all
+
+    <Files "webconsole.php">
+        Order Allow,Deny
+        Allow from all
+    </Files>
+
+    <Files "favicon.ico">
+        Order Allow,Deny
+        Allow from all
+    </Files>
+</IfModule>
+
+# Errors
+ErrorDocument 401 "401: Authorization Required
+ErrorDocument 403 "403: Access Forbidden
+ErrorDocument 404 "404: File not found
+ErrorDocument 500 "500: Internal Server Error

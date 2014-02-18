@@ -1,0 +1,12 @@
+[submodule "src/vendor/jquery.terminal"]
+	path = src/vendor/jquery.terminal
+	url = https://github.com/jcubic/jquery.terminal.git
+[submodule "src/vendor/jquery.mousewheel"]
+	path = src/vendor/jquery.mousewheel
+	url = https://github.com/brandonaaron/jquery-mousewheel.git
+[submodule "src/vendor/eazy-jsonrpc"]
+	path = src/vendor/eazy-jsonrpc
+	url = https://github.com/sergeyfast/eazy-jsonrpc.git
+[submodule "src/vendor/normalize"]
+	path = src/vendor/normalize
+	url = https://github.com/necolas/normalize.css.git
