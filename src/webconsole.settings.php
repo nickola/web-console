@@ -3,7 +3,7 @@
 // (c) 2007-<!-- @echo YEAR --> Coderico (http://www.coderico.com)
 //
 // Author: Nickolay Kovalev (http://resume.nickola.ru)
-// GitHub: https://github.com/coderico/web-console
+// GitHub: https://github.com/nickola/web-console
 // URL: http://www.web-console.org
 
 // Single-user credentials
@@ -19,7 +19,7 @@ $ACCOUNTS = array();
 $HOME_DIRECTORY = '';
 
 // Code below is automatically generated from different components
-// For more information see: https://github.com/coderico/web-console
+// For more information see: https://github.com/nickola/web-console
 //
 // Used components:
 //   - jQuery JavaScript Library: https://github.com/jquery/jquery
