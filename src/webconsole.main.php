@@ -75,8 +75,13 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
         if ($user && $password) {
             global $ACCOUNTS;
 
-            if (isset($ACCOUNTS[$user]) && $ACCOUNTS[$user] && strcmp($password, $ACCOUNTS[$user]) == 0)
-                return $user . ':' . $this->password_hash($password);
+            if (isset($ACCOUNTS[$user]) && $ACCOUNTS[$user]) {
+                if (strcmp($password, $ACCOUNTS[$user]) == 0)
+                    return $user . ':' . $this->password_hash($password);
+                $password = $this->password_hash($password);
+                if (strcmp($password, $ACCOUNTS[$user]) == 0)
+                    return $user . ':' . $this->password_hash($password);
+            }
         }
 
         throw new Exception("Incorrect user or password");
