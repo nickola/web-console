@@ -159,9 +159,9 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
         if ($result) return $result;
 
         $path = trim((string) $path);
-        if (empty($path)) $path = $this->home_directory;
+        if (!isset($path) || !strlen($path)) $path = $this->home_directory;
 
-        if (!empty($path)) {
+        if (isset($path) && strlen($path)) {
             if (is_dir($path)) {
                 if (!@chdir($path)) return array('output' => "cd: ". $path . ": Unable to change directory");
             }
