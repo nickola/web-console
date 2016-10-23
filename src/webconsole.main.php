@@ -144,10 +144,22 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
         $result = array('token' => $this->authenticate_user($user, $password),
                         'environment' => $this->get_environment());
 
+        $home_directory_found = false;
         global $HOME_DIRECTORY;
-        if (!empty($HOME_DIRECTORY)) {
-            if (is_dir($HOME_DIRECTORY))
+        global $USER_HOME_DIRECTORY;
+        if(!empty($USER_HOME_DIRECTORY) && !empty($USER_HOME_DIRECTORY[$user])){
+            if(is_dir($USER_HOME_DIRECTORY[$user])){
+                $result['environment']['path'] = $USER_HOME_DIRECTORY[$user];
+                $home_directory_found = true;
+            }
+            else $result['output'] = "User home directory not found: ". $USER_HOME_DIRECTORY[$user];
+        }
+
+        if(!empty($HOME_DIRECTORY) && !$home_directory_found) {
+            if (is_dir($HOME_DIRECTORY)){
                 $result['environment']['path'] = $HOME_DIRECTORY;
+                $home_directory_found = true;
+            }
             else $result['output'] = "Home directory not found: ". $HOME_DIRECTORY;
         }
 
