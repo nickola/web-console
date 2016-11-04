@@ -5,28 +5,25 @@
                         'domain': document.domain || window.location.host,
                         'is_small_window': $(document).width() < 625 ? true : false};
         var environment = {'user': '', 'hostname': '', 'path': ''};
+        var no_login = typeof(__NO_LOGIN__) !== 'undefined' ? __NO_LOGIN__ : false;
+        var silent_mode = false;
 
         // Default banner
-        var banner = 'Web Console';
-        var banner_link = '<a href="http://www.web-console.org">http://www.web-console.org</a>';
-        var banner_raw = '<div class="spaced-bottom">' + banner_link + '</div>';
+        var banner_main = "Web Console";
+        var banner_link = 'http://web-console.org';
+        var banner_extra = banner_link + '\n';
 
         // Big banner
         if (!settings.is_small_window) {
-            banner = "" +
-                     "  _    _      _     _____                       _                " +
-                     "\n | |  | |    | |   /  __ \\                     | |            " +
-                     "\n | |  | | ___| |__ | /  \\/ ___  _ __  ___  ___ | | ___        " +
-                     "\n | |/\\| |/ _ \\ '_ \\| |    / _ \\| '_ \\/ __|/ _ \\| |/ _ \\ " +
-                     "\n \\  /\\  /  __/ |_) | \\__/\\ (_) | | | \\__ \\ (_) | |  __/  " +
-                     "\n  \\/  \\/ \\___|____/ \\____/\\___/|_| |_|___/\\___/|_|\\___| " +
-                     "";
-
-            var banner_link_spaces = 15;
-            var banner_link_spaces_string = '';
-            for (var i = 0; i < banner_link_spaces; i++) banner_link_spaces_string += '&nbsp;';
-
-            banner_raw = '<div class="spaced">' + banner_link_spaces_string + banner_link + '</div>';
+            banner_main = "" +
+                          "  _    _      _     _____                       _                " +
+                          "\n | |  | |    | |   /  __ \\                     | |            " +
+                          "\n | |  | | ___| |__ | /  \\/ ___  _ __  ___  ___ | | ___        " +
+                          "\n | |/\\| |/ _ \\ '_ \\| |    / _ \\| '_ \\/ __|/ _ \\| |/ _ \\ " +
+                          "\n \\  /\\  /  __/ |_) | \\__/\\ (_) | | | \\__ \\ (_) | |  __/  " +
+                          "\n  \\/  \\/ \\___|____/ \\____/\\___/|_| |_|___/\\___/|_|\\___| " +
+                          "";
+            banner_extra = '\n                 ' + banner_link + '\n';
         }
 
         // Output
@@ -148,7 +145,7 @@
         }
 
         // Login
-        function login(user, password, callback, terminal) {
+        function login(user, password, callback) {
             user = $.trim(user || '');
             password = $.trim(password || '');
 
@@ -184,26 +181,39 @@
 
         // Logout
         function logout() {
-            terminal.clear();
-            terminal.logout();
+            silent_mode = true;
+
+            try {
+                terminal.clear();
+                terminal.logout();
+            }
+            catch (error) {}
+
+            silent_mode = false;
         }
 
         // Terminal
         var terminal = $('body').terminal(interpreter, {
-            login: login,
+            login: !no_login ? login : false,
             prompt: make_prompt(),
-            greetings: "You are authenticated",
+            greetings: !no_login ? "You are authenticated" : "",
             tabcompletion: true,
             completion: completion,
-            onBlur: function() { return false; }
+            onBlur: function() { return false; },
+            exceptionHandler: function(exception) {
+                if (!silent_mode) terminal.exception(exception);
+            }
         });
 
         // Logout
-        logout();
-        $(window).unload(function() { logout(); });
+        if (no_login) terminal.set_token('NO_LOGIN');
+        else {
+            logout();
+            $(window).unload(function() { logout(); });
+        }
 
         // Banner
-        if (banner) terminal.echo(banner);
-        if (banner_raw) terminal.echo(banner_raw, {raw: true});
+        if (banner_main) terminal.echo(banner_main);
+        if (banner_extra) terminal.echo(banner_extra);
     });
 })(jQuery);

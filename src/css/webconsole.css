@@ -1,6 +1,6 @@
 body { background-color: #000000; }
 
-body, .terminal, .terminal .terminal-output div div, .terminal .prompt {
+body, .terminal, .cmd, .terminal .terminal-output div div, .terminal .prompt {
     color: #cccccc;
     font-family: monospace, fixed;
     font-size: 15px;

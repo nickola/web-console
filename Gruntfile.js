@@ -11,7 +11,8 @@ module.exports = function(grunt) {
                 },
                 src: [
                     'src/webconsole.settings.php',
-                    'src/vendor/eazy-jsonrpc/BaseJsonRpcServer.php',
+                    'src/vendor/eazy-jsonrpc/src/BaseJsonRpcServer.php',
+                    'src/close.tag.php',
                     'src/webconsole.main.php'
                 ],
                 dest : 'release/parts/webconsole.html'
@@ -19,7 +20,7 @@ module.exports = function(grunt) {
             css: {
                 src: [
                     'src/vendor/normalize/normalize.css',
-                    'src/vendor/jquery.terminal/css/jquery.terminal.css',
+                    'src/vendor/jquery.terminal/css/jquery.terminal-0.11.12.min.css',
                     'src/css/webconsole.css'
                 ],
                 dest: 'release/parts/all.css'
@@ -31,9 +32,9 @@ module.exports = function(grunt) {
                     }
                 },
                 src: [
-                    'src/vendor/jquery/jquery.js',
-                    'src/vendor/jquery.mousewheel/jquery.mousewheel.js',
-                    'src/vendor/jquery.terminal/js/jquery.terminal-src.js',
+                    'src/vendor/jquery.terminal/js/jquery-1.7.1.min.js',
+                    'src/vendor/jquery.terminal/js/jquery.mousewheel-min.js',
+                    'src/vendor/jquery.terminal/js/jquery.terminal-0.11.12.min.js',
                     'src/js/webconsole.js'
                 ],
                 dest: 'release/parts/all.js'
@@ -88,7 +89,7 @@ module.exports = function(grunt) {
                 dest: 'release/parts/all.min.js'
             }
         },
-        preprocess : {
+        preprocess: {
             php: {
                 options: {
                     context : {
@@ -98,6 +99,20 @@ module.exports = function(grunt) {
                     }
                 },
                 src: 'release/parts/webconsole.html',
+                dest: 'release/parts/webconsole.php'
+            }
+        },
+        replace: {
+            php: {
+                options: {
+                  patterns: [
+                    {
+                      match: /__NO_LOGIN__/g,
+                      replacement: '<?php echo $NO_LOGIN ? "true" : "false" ?>'
+                    }
+                  ]
+                },
+                src: 'release/parts/webconsole.php',
                 dest: 'release/webconsole.php'
             }
         },
@@ -121,6 +136,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-preprocess');
+    grunt.loadNpmTasks('grunt-replace');
 
-    grunt.registerTask('default', ['concat', 'cssmin', 'uglify', 'preprocess', 'compress']);
+    grunt.registerTask('default', ['concat', 'cssmin', 'uglify', 'preprocess', 'replace', 'compress']);
 };

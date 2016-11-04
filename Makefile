@@ -6,7 +6,7 @@ serve-src:
 serve-release:
 	@php -S localhost:8000 -t release
 
-compress:
+build:
 	@grunt
 
 pull:

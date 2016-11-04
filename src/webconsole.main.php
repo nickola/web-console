@@ -2,8 +2,10 @@
 // Initializing
 if (!isset($ACCOUNTS)) $ACCOUNTS = array();
 if (isset($USER) && isset($PASSWORD) && $USER && $PASSWORD) $ACCOUNTS[$USER] = $PASSWORD;
+if (!isset($PASSWORD_HASH_ALGORITHM)) $PASSWORD_HASH_ALGORITHM = '';
+if (!isset($NO_LOGIN)) $NO_LOGIN = false;
 if (!isset($HOME_DIRECTORY)) $HOME_DIRECTORY = '';
-$IS_CONFIGURED = count($ACCOUNTS) >= 1 ? true : false;
+$IS_CONFIGURED = ($NO_LOGIN || count($ACCOUNTS) >= 1) ? true : false;
 
 // Command execution
 function execute_command($command) {
@@ -64,8 +66,8 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
     }
 
     // Authentication
-    private function password_hash($password) {
-        return hash('sha256', trim((string) $password));
+    private function password_hash($algorithm, $password) {
+        return hash($algorithm, trim((string) $password));
     }
 
     private function authenticate_user($user, $password) {
@@ -73,16 +75,24 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
         $password = trim((string) $password);
 
         if ($user && $password) {
-            global $ACCOUNTS;
+            global $ACCOUNTS, $PASSWORD_HASH_ALGORITHM;
 
-            if (isset($ACCOUNTS[$user]) && $ACCOUNTS[$user] && strcmp($password, $ACCOUNTS[$user]) == 0)
-                return $user . ':' . $this->password_hash($password);
+            if (!empty($ACCOUNTS[$user])) {
+                if ($PASSWORD_HASH_ALGORITHM)
+                    $password = $this->password_hash($PASSWORD_HASH_ALGORITHM, $password);
+
+                if (strcmp($password, $ACCOUNTS[$user]) == 0)
+                    return $user . ':' . $this->password_hash('sha256', $password);
+            }
         }
 
         throw new Exception("Incorrect user or password");
     }
 
     private function authenticate_token($token) {
+        global $NO_LOGIN;
+        if ($NO_LOGIN) return true;
+
         $token = trim((string) $token);
         $token_parts = explode(':', $token, 2);
 
@@ -93,16 +103,28 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
             if ($user && $password_hash) {
                 global $ACCOUNTS;
 
-                if (isset($ACCOUNTS[$user]) && $ACCOUNTS[$user]) {
-                    $real_password_hash = $this->password_hash($ACCOUNTS[$user]);
+                if (!empty($ACCOUNTS[$user])) {
+                    $real_password_hash = $this->password_hash('sha256', $ACCOUNTS[$user]);
 
                     if (strcmp($password_hash, $real_password_hash) == 0)
-                        return true;
+                        return $user;
                 }
             }
         }
 
         throw new Exception("Incorrect user or password");
+    }
+
+    private function get_home_directory($user, $default) {
+        global $HOME_DIRECTORY;
+
+        if (!empty($HOME_DIRECTORY)) {
+            if (is_string($HOME_DIRECTORY)) return $HOME_DIRECTORY;
+            else if (!empty($user) && is_string($user) && !empty($HOME_DIRECTORY[$user]))
+                return $HOME_DIRECTORY[$user];
+        }
+
+        return $default ? getcwd() : '';
     }
 
     // Environment
@@ -112,28 +134,23 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
     }
 
     private function set_environment($environment) {
-        if ($environment && !empty($environment)) {
-            $environment = (array) $environment;
+        $environment = !empty($environment) ? (array) $environment : array();
+        $path = !empty($environment['path']) ? $environment['path'] : $this->home_directory;
 
-            if (isset($environment['path']) && $environment['path']) {
-                $path = $environment['path'];
-
-                if (is_dir($path)) {
-                    if (!@chdir($path)) return array('output' => "Unable to change directory to current working directory, updating current directory",
-                                                     'environment' => $this->get_environment());
-                }
-                else return array('output' => "Current working directory not found, updating current directory",
-                                  'environment' => $this->get_environment());
+        if (!empty($path)) {
+            if (is_dir($path)) {
+                if (!@chdir($path)) return array('output' => "Unable to change directory to current working directory, updating current directory",
+                                                 'environment' => $this->get_environment());
             }
+            else return array('output' => "Current working directory not found, updating current directory",
+                              'environment' => $this->get_environment());
         }
     }
 
     // Initialization
     private function initialize($token, $environment) {
-        $this->authenticate_token($token);
-
-        global $HOME_DIRECTORY;
-        $this->home_directory = !empty($HOME_DIRECTORY) ? $HOME_DIRECTORY : getcwd();
+        $user = $this->authenticate_token($token);
+        $this->home_directory = $this->get_home_directory($user, true);
         $result = $this->set_environment($environment);
 
         if ($result) return $result;
@@ -144,11 +161,10 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
         $result = array('token' => $this->authenticate_user($user, $password),
                         'environment' => $this->get_environment());
 
-        global $HOME_DIRECTORY;
-        if (!empty($HOME_DIRECTORY)) {
-            if (is_dir($HOME_DIRECTORY))
-                $result['environment']['path'] = $HOME_DIRECTORY;
-            else $result['output'] = "Home directory not found: ". $HOME_DIRECTORY;
+        $home_directory = $this->get_home_directory($user, false);
+        if (!empty($home_directory)) {
+            if (is_dir($home_directory)) $result['environment']['path'] = $home_directory;
+            else $result['output'] = "Home directory not found: ". $home_directory;
         }
 
         return $result;
@@ -249,10 +265,10 @@ else if (!$IS_CONFIGURED) {
             <p>Web Console must be configured before use:</p>
             <ul>
                 <li>Open Web Console PHP file in your favorite text editor.</li>
-                <li>At the top of the file enter your <span class="variable">$USER</span> and <span class="variable">$PASSWORD</span> credentials, edit any other settings that you like (see description in the comments).</li>
+                <li>At the beginning of the file enter your <span class="variable">$USER</span> and <span class="variable">$PASSWORD</span> credentials, edit any other settings that you like (see description in the comments).</li>
                 <li>Upload changed file to the web server and open it in the browser.</li>
             </ul>
-            <p>For more information visit <a href="http://www.web-console.org">Web Console website</a>.</p>
+            <p>For more information visit Web Console website: <a href="http://web-console.org">http://web-console.org</a></p>
         </div>
     </body>
 </html>
