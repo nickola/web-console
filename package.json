@@ -1,6 +1,6 @@
 {
   "name": "WebConsole",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-concat": "~0.3.0",
