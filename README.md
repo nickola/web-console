@@ -32,6 +32,7 @@ Also, various third-party components are used.
 
 # URLs
 
+ - Website: http://web-console.org
  - GitHub: https://github.com/nickola/web-console
  - Patreon: https://www.patreon.com/nickola
  - Author: http://nickola.ru
