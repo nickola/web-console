@@ -20,7 +20,7 @@ module.exports = function(grunt) {
             css: {
                 src: [
                     'src/vendor/normalize/normalize.css',
-                    'src/vendor/jquery.terminal/css/jquery.terminal-0.11.12.min.css',
+                    'src/vendor/jquery.terminal/css/jquery.terminal.min.css',
                     'src/css/webconsole.css'
                 ],
                 dest: 'release/parts/all.css'
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                 src: [
                     'src/vendor/jquery.terminal/js/jquery-1.7.1.min.js',
                     'src/vendor/jquery.terminal/js/jquery.mousewheel-min.js',
-                    'src/vendor/jquery.terminal/js/jquery.terminal-0.11.12.min.js',
+                    'src/vendor/jquery.terminal/js/jquery.terminal.min.js',
                     'src/js/webconsole.js'
                 ],
                 dest: 'release/parts/all.js'
