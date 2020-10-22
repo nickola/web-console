@@ -16,7 +16,7 @@ Installation process is really simple:
   - At the beginning of the file enter your `$USER` and `$PASSWORD` credentials, edit any other settings that you like (see description in the comments).
   - Upload changed `webconsole.php` file to the web server and open it in the browser.
 
-## Docker
+# Docker
 
 Build and start container:
 
