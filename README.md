@@ -45,7 +45,6 @@ Also, various third-party components are used.
 
  - Website: http://web-console.org
  - GitHub: https://github.com/nickola/web-console
- - Patreon: https://www.patreon.com/nickola
  - Author: http://nickola.ru
 
 # License
