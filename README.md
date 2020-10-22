@@ -18,10 +18,14 @@ Installation process is really simple:
 
 ## Docker
 
+Build and start container:
+
 ```
 docker build -t web-console .
-docker run -d --rm --name web-console -e USER=admin -e PASSWORD=pw -p 8080:80 web-console
+docker run --rm --name web-console -e USER=admin -e PASSWORD=password -p 8000:80 web-console
 ```
+
+Now you can visit: http://localhost:8000
 
 # About author
 
