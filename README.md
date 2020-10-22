@@ -30,7 +30,7 @@ Now you can visit: http://localhost:8000
 # About author
 
 Web Console has been developed by [Nickolay Kovalev](http://nickola.ru).
-If you have interest job offers, you can see my contacts [here](http://nickola.ru).
+If you have any interest job offers, you can see my contacts [here](http://nickola.ru).
 Also, various third-party components are used.
 
 # Used components
