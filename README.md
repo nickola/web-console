@@ -3,7 +3,7 @@
 Web Console is a web-based application that allows to execute shell commands on a server directly from a browser (web-based shell).
 The application is very light, does not require any database and can be installed and configured in about 3 minutes.
 
-If you like Web Console, please consider an opportunity to support it on [Patreon](https://www.patreon.com/nickola).
+If you like Web Console, please consider an opportunity to support it in [any amount of Bitcoin](https://www.blockchain.com/btc/address/1NeDa2nXJLi5A8AN2CerBSSWD363vjdWaX).
 
 ![Web Console](https://raw.github.com/nickola/web-console/master/screenshots/main.png)
 
@@ -29,9 +29,7 @@ Now you can visit: http://localhost:8000
 
 # About author
 
-Web Console has been developed by [Nickolay Kovalev](http://nickola.ru).
-If you have any interest job offers, you can see my contacts [here](http://nickola.ru).
-Also, various third-party components are used.
+Web Console has been developed by [Nickolay Kovalev](http://nickola.ru). Also, various third-party components are used, see below.
 
 # Used components
 
