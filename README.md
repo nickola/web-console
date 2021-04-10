@@ -41,8 +41,8 @@ Web Console has been developed by [Nickolay Kovalev](http://nickola.ru). Also, v
 
 # URLs
 
- - Website: http://web-console.org
  - GitHub: https://github.com/nickola/web-console
+ - Website: http://nickola.ru/projects/web-console
  - Author: http://nickola.ru
 
 # License
