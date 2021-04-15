@@ -21,14 +21,14 @@ function get_hash($algorithm, $string) {
 }
 
 // Command execution
-function execute_command($command) {
+function execute_command($command, $path) {
     $descriptors = array(
         0 => array('pipe', 'r'), // STDIN
         1 => array('pipe', 'w'), // STDOUT
         2 => array('pipe', 'w')  // STDERR
     );
 
-    $process = proc_open($command . ' 2>&1', $descriptors, $pipes);
+    $process = proc_open($command . ' 2>&1', $descriptors, $pipes, $path);
     if (!is_resource($process)) die("Can't execute command.");
 
     // Nothing to push to STDIN
@@ -244,8 +244,9 @@ class WebConsoleRPCServer extends BaseJsonRpcServer {
     public function run($token, $environment, $command) {
         $result = $this->initialize($token, $environment);
         if ($result) return $result;
-
-        $output = ($command && !is_empty_string($command)) ? execute_command($command) : '';
+		
+		$environment = !empty($environment) ? (array) $environment : array();
+        $output = ($command && !is_empty_string($command)) ? execute_command($command, $environment['path']) : '';
         if ($output && substr($output, -1) == "\n") $output = substr($output, 0, -1);
 
         return array('output' => $output);
